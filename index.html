@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Comisiones - Century 21 CAM Grupo</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/fonts.css">
+
+    <script>
+        // Configuración de Tailwind para usar los colores y fuentes de Century 21
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'c21-gold': '#BEAF87',
+                        'c21-grey': '#252526',
+                        'c21-dark-gold': '#746649',
+                        'c21-light-grey': '#F4F4F6',
+                        'c21-white': '#FFFFFF'
+                    },
+                    fontFamily: {
+                        sans: ['Oakes', 'Roboto', 'sans-serif'],
+                        oakes: ['Typold', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-c21-light-grey flex items-center justify-center min-h-screen p-4 font-sans">
+
+    <main class="bg-c21-white p-6 md:p-10 rounded-2xl shadow-xl max-w-lg w-full">
+
+        <div class="flex flex-col items-center mb-6">
+            <div
+                class="w-24 h-24 bg-c21-grey rounded-full flex items-center justify-center shadow-md mb-4 overflow-hidden">
+                <img src="logo.png" alt="Sello Century 21" class="w-20 h-20">
+            </div>
+            <h1 class="text-3xl font-bold text-c21-grey tracking-tight font-oakes">Calculadora de <span
+                    class="text-c21-gold">Comisiones</span></h1>
+            <p class="text-gray-500">C21 CAM Grupo</p>
+        </div>
+
+        <div class="space-y-6">
+            <div class="text-left">
+                <label for="propertyValue" class="block font-medium text-gray-700 mb-2">Precio de Venta</label>
+                <div class="relative">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
+                        <span class="text-gray-500 sm:text-sm">MXN</span>
+                    </div>
+                    <input type="text" id="propertyValue" placeholder="10,000,000" oninput="formatAndCalculate()"
+                        inputmode="numeric"
+                        class="w-full p-3 pl-12 border border-gray-300 rounded-lg text-right text-xl focus:ring-2 focus:ring-c21-gold focus:border-transparent transition-shadow duration-300">
+                </div>
+            </div>
+            <div class="text-left">
+                <label for="commissionRate" class="block font-medium text-gray-700 mb-2">Comisión Total Pactada</label>
+                <div class="relative">
+                    <input type="number" id="commissionRate" value="6" oninput="calculateCommission()"
+                        class="w-full p-3 pr-8 border border-gray-300 rounded-lg text-right text-xl focus:ring-2 focus:ring-c21-gold focus:border-transparent transition-shadow duration-300">
+                    <div class="pointer-events-none absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <span class="text-gray-500 sm:text-sm">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-left">
+            <h2 class="text-center text-xl font-bold text-c21-grey mb-4 pb-2 border-b">Desglose por un Lado</h2>
+            <div class="space-y-3 text-gray-800">
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-gray-600">Ingreso Bruto por Lado (GCI)</span>
+                    <span id="gciResult" class="font-semibold text-c21-grey text-lg">$0.00</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-gray-600" id="royaltiesLabel">Regalías C21 y FNP (8%)</span>
+                    <span id="royaltiesResult" class="font-semibold text-red-500 text-lg">-$0.00</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                    <span class="text-gray-600">Comisión Neta (AGC)</span>
+                    <span id="agcResult" class="font-semibold text-c21-grey text-lg">$0.00</span>
+                </div>
+                <div
+                    class="bg-c21-gold text-white p-4 rounded-lg mt-4 flex justify-between items-center text-xl shadow-lg">
+                    <span class="font-bold" id="agentTakeHomeLabel">Ingreso para Asesor (50%)</span>
+                    <span id="agentTakeHome" class="font-bold">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-xs text-c21-dark-gold bg-c21-gold/10 p-3 rounded-lg text-justify shadow-inner">
+            <strong>Nota Importante:</strong> Esta calculadora es una herramienta de estimación. Los cálculos no
+            incluyen IVA, ISR u otras
+            deducciones aplicables. Favor de validar con Gerencia o Dirección.
+        </div>
+    </main>
+
+    <script>
+        // --- CONFIGURACIÓN DE LA CALCULADORA ---
+        const ROYALTY_RATE = 0.08; // 8% de regalías
+        const AGENT_SPLIT_RATE = 0.50; // 50% para el asesor
+
+        function formatCurrency(value, withSign = false) {
+            const sign = withSign && value > 0 ? '-' : '';
+            return sign + new Intl.NumberFormat('es-MX', {
+                style: 'currency',
+                currency: 'MXN'
+            }).format(Math.abs(value));
+        }
+
+        function formatInputValue(inputElement) {
+            let value = inputElement.value.replace(/[^0-9]/g, '');
+            if (value) {
+                const numberValue = parseInt(value, 10);
+                inputElement.value = new Intl.NumberFormat('es-MX').format(numberValue);
+            } else {
+                inputElement.value = '';
+            }
+        }
+
+        function formatAndCalculate() {
+            const input = document.getElementById('propertyValue');
+            formatInputValue(input);
+            calculateCommission();
+        }
+
+        function calculateCommission() {
+            const propertyValueString = document.getElementById('propertyValue').value.replace(/,/g, '') || '0';
+            const propertyValue = parseFloat(propertyValueString);
+            const commissionRate = parseFloat(document.getElementById('commissionRate').value) || 0;
+
+            // Un "lado" es la mitad de la comisión total.
+            const commissionPerSideRate = commissionRate / 2;
+
+            // 1. Ingreso Bruto por Comisión (GCI) por Lado
+            const gci = propertyValue * (commissionPerSideRate / 100);
+
+            // 2. Regalías Century 21 y FNP (8% del GCI)
+            const royalties = gci * ROYALTY_RATE;
+
+            // 3. Comisión después de Regalías (AGC)
+            const agc = gci - royalties;
+
+            // 4. INGRESO PARA ASESOR (50% del AGC)
+            const agentTakeHome = agc * AGENT_SPLIT_RATE;
+
+            // Actualizar etiquetas con porcentajes dinámicos
+            document.getElementById('royaltiesLabel').textContent = `Regalías C21 y FNP (${ROYALTY_RATE * 100}%)`;
+            document.getElementById('agentTakeHomeLabel').textContent = `Ingreso para Asesor (${AGENT_SPLIT_RATE * 100}%)`;
+
+            // Mostrar resultados en la página
+            document.getElementById('gciResult').textContent = formatCurrency(gci);
+            document.getElementById('royaltiesResult').textContent = formatCurrency(royalties, true); // Añadir signo negativo
+            document.getElementById('agcResult').textContent = formatCurrency(agc);
+            document.getElementById('agentTakeHome').textContent = formatCurrency(agentTakeHome);
+        }
+
+        // Cargar un valor de ejemplo al iniciar para que la calculadora no aparezca vacía
+        document.addEventListener('DOMContentLoaded', () => {
+            const propertyInput = document.getElementById('propertyValue');
+            propertyInput.value = '2500000'; // Usar string para que la función lo formatee
+            formatInputValue(propertyInput);
+            calculateCommission();
+        });
+    </script>
+
+</body>
+
+</html>

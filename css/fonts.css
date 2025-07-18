@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Typold';
+    src: url('../fonts/Typold-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Typold';
+    src: url('../fonts/Typold-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oakes';
+    src: url('../fonts/Oakes-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oakes';
+    src: url('../fonts/Oakes-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
