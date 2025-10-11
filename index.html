@@ -4,42 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Comisiones - Century 21 CAM Grupo</title>
+    <title>Calculadora de Planes de Pago - Century 21 CAM Grupo</title>
 
-    <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Calculadora de comisiones para asesores inmobiliarios de Century 21 CAM Grupo. Estima tus ingresos de forma rápida y sencilla.">
+        content="Calculadora de planes de pago para proyectos de Century 21 CAM Grupo. Simula escenarios de apartado, enganche y mensualidades.">
     <meta name="keywords"
-        content="calculadora de comisiones, century 21, c21, cam grupo, inmobiliaria, asesor inmobiliario, bienes raíces, comisiones, gci, agc">
+        content="calculadora, plan de pagos, century 21, c21, cam grupo, inmobiliaria, preventa, mensualidades, enganche">
     <meta name="author" content="Century 21 CAM Grupo">
 
-    <!-- Favicon -->
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="shortcut icon" href="logo.png" type="image/png">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Calculadora de Comisiones - Century 21 CAM Grupo">
-    <meta property="og:description"
-        content="Calculadora de comisiones para asesores inmobiliarios de Century 21 CAM Grupo. Estima tus ingresos de forma rápida y sencilla.">
-    <meta property="og:image" content="logo.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="Calculadora de Comisiones - Century 21 CAM Grupo">
-    <meta property="twitter:description"
-        content="Calculadora de comisiones para asesores inmobiliarios de Century 21 CAM Grupo. Estima tus ingresos de forma rápida y sencilla.">
-    <meta property="twitter:image" content="logo.png">
-
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/fonts.css">
 
     <script>
-        // Configuración de Tailwind para usar los colores y fuentes de Century 21
         tailwind.config = {
             theme: {
                 extend: {
@@ -58,143 +40,352 @@
             }
         }
     </script>
+    <style>
+        /* ESTILOS PARA IMPRESIÓN */
+        @media print {
+            body {
+                background-color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            main {
+                box-shadow: none !important;
+                margin: 0;
+                max-width: 100%;
+                border: 1px solid #ccc;
+                padding: 1rem;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            input,
+            .toggle-container {
+                border: 1px solid #ddd !important;
+            }
+
+            .bg-c21-gold {
+                background-color: #BEAF87 !important;
+                color: black !important;
+            }
+
+            .bg-c21-grey {
+                background-color: #252526 !important;
+                color: white !important;
+            }
+
+            .text-red-500 {
+                color: #ef4444 !important;
+            }
+
+            .text-green-500 {
+                color: #22c55e !important;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-c21-light-grey flex items-center justify-center min-h-screen p-4 font-sans">
 
-    <main class="bg-c21-white p-6 md:p-10 rounded-2xl shadow-xl max-w-lg w-full">
+    <main class="bg-c21-white p-6 md:p-10 rounded-2xl shadow-xl max-w-2xl w-full">
 
-        <div class="flex flex-col items-center mb-8">
+        <div class="flex flex-col items-center mb-8 no-print">
             <div
                 class="w-24 h-24 bg-c21-grey rounded-full flex items-center justify-center shadow-md mb-4 overflow-hidden">
                 <img src="logo.png" alt="Sello Century 21" class="w-20 h-20">
             </div>
             <h1 class="text-xl md:text-3xl font-bold text-c21-grey tracking-tight font-oakes">
-                Calculadora de <span class="text-c21-gold">Comisiones</span>
+                Calculadora de <span class="text-c21-gold">Planes de Pago</span>
             </h1>
             <p class="text-gray-500">C21 CAM Grupo</p>
         </div>
 
         <div class="space-y-6">
-            <div class="text-left">
-                <label for="propertyValue" class="block font-medium text-gray-700 mb-2">Precio de Venta</label>
+            <div>
+                <label for="totalPrice" class="block font-medium text-gray-700 mb-2 text-left">Precio Total de la
+                    Propiedad</label>
                 <div class="relative">
-                    <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
-                        <span class="text-gray-500 sm:text-sm">MXN</span>
-                    </div>
-                    <input type="text" id="propertyValue" placeholder="10,000,000" oninput="formatAndCalculate()"
-                        inputmode="numeric"
-                        class="w-full p-3 pl-12 border border-gray-300 rounded-lg text-right text-lg focus:ring-2 focus:ring-c21-gold focus:border-transparent transition-shadow duration-300">
+                    <span
+                        class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">MXN</span>
+                    <input type="text" id="totalPrice" inputmode="numeric" oninput="formatAndCalculateAll('totalPrice')"
+                        class="w-full p-3 pl-12 border border-gray-300 rounded-lg text-right text-lg font-bold focus:ring-2 focus:ring-c21-gold transition-shadow">
                 </div>
             </div>
-            <div class="text-left">
-                <label for="commissionRate" class="block font-medium text-gray-700 mb-2">Comisión Total Pactada</label>
-                <div class="relative">
-                    <input type="number" id="commissionRate" value="6" oninput="calculateCommission()"
-                        class="w-full p-3 pr-8 border border-gray-300 rounded-lg text-right text-lg focus:ring-2 focus:ring-c21-gold focus:border-transparent transition-shadow duration-300">
-                    <div class="pointer-events-none absolute inset-y-0 right-0 pr-3 flex items-center">
-                        <span class="text-gray-500 sm:text-sm">%</span>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="apartado" class="block font-medium text-gray-700 mb-2 text-left">Apartado
+                        (Reserva)</label>
+                    <div class="relative">
+                        <span
+                            class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">MXN</span>
+                        <input type="text" id="apartado" inputmode="numeric" oninput="formatAndCalculateAll('apartado')"
+                            class="w-full p-3 pl-12 border border-gray-300 rounded-lg text-right text-lg focus:ring-2 focus:ring-c21-gold transition-shadow">
                     </div>
                 </div>
+                <div>
+                    <label for="numMensualidades" class="block font-medium text-gray-700 mb-2 text-left">No. de
+                        Mensualidades</label>
+                    <input type="number" id="numMensualidades" value="12" min="1" oninput="calculateAll()"
+                        class="w-full p-3 border border-gray-300 rounded-lg text-right text-lg focus:ring-2 focus:ring-c21-gold transition-shadow">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block font-medium text-gray-700 mb-2 text-left">Enganche</label>
+                    <div class="flex">
+                        <input type="text" id="engancheValue" inputmode="numeric" value="30"
+                            oninput="handleDynamicInput('enganche')"
+                            class="w-2/3 p-3 border border-r-0 border-gray-300 rounded-l-lg text-right text-lg focus:ring-2 focus:ring-c21-gold transition-shadow">
+                        <div class="toggle-container flex w-1/3 border border-gray-300 rounded-r-lg overflow-hidden">
+                            <button id="enganchePercent" onclick="setMode('enganche', '%')"
+                                class="w-1/2 bg-c21-grey text-white font-bold">%</button>
+                            <button id="engancheMonto" onclick="setMode('enganche', '$')"
+                                class="w-1/2 bg-gray-200 text-gray-600 font-bold">$</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-medium text-gray-700 mb-2 text-left">Saldo Contra Entrega</label>
+                    <div class="flex">
+                        <input type="text" id="saldoValue" inputmode="numeric" value="20"
+                            oninput="handleDynamicInput('saldo')"
+                            class="w-2/3 p-3 border border-r-0 border-gray-300 rounded-l-lg text-right text-lg focus:ring-2 focus:ring-c21-gold transition-shadow">
+                        <div class="toggle-container flex w-1/3 border border-gray-300 rounded-r-lg overflow-hidden">
+                            <button id="saldoPercent" onclick="setMode('saldo', '%')"
+                                class="w-1/2 bg-c21-grey text-white font-bold">%</button>
+                            <button id="saldoMonto" onclick="setMode('saldo', '$')"
+                                class="w-1/2 bg-gray-200 text-gray-600 font-bold">$</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="startDate" class="block font-medium text-gray-700 mb-2 text-left">Fecha de Inicio de
+                    Mensualidades</label>
+                <input type="date" id="startDate" oninput="calculateAll()"
+                    class="w-full p-3 border border-gray-300 rounded-lg text-lg focus:ring-2 focus:ring-c21-gold transition-shadow">
             </div>
         </div>
 
-        <div class="mt-8 text-left">
-            <h2 class="text-center text-xl font-bold text-c21-grey mb-4 pb-2 border-b">Desglose por un Lado</h2>
-            <div class="space-y-3 text-gray-600 text-sm">
-                <div class="flex justify-between items-baseline py-2 border-b border-gray-200">
-                    <span class="pr-2">Ingreso Bruto por Lado (GCI)</span>
-                    <span id="gciResult" class="font-semibold text-right flex-shrink-0">$0.00</span>
-                </div>
-                <div class="flex justify-between items-baseline py-2 border-b border-gray-200">
-                    <span class="pr-2" id="royaltiesLabel">Regalías C21 y FNP (8%)</span>
-                    <span id="royaltiesResult" class="font-semibold text-red-400 text-right flex-shrink-0">-$0.00</span>
-                </div>
-                <div class="flex justify-between items-baseline py-2">
-                    <span class="pr-2">Comisión Neta (AGC)</span>
-                    <span id="agcResult" class="font-semibold text-right flex-shrink-0">$0.00</span>
-                </div>
+        <div id="validationMessage" class="mt-6 text-center font-semibold p-3 rounded-lg"></div>
+
+        <div class="mt-6">
+            <h2 class="text-center text-xl font-bold text-c21-grey mb-4 pb-2 border-b">Resumen del Plan de Pagos</h2>
+            <div class="bg-c21-gold text-black p-4 rounded-lg mt-6 text-center shadow-lg">
+                <span class="block text-sm font-bold uppercase tracking-wider">Pago Mensual Estimado</span>
+                <span id="monthlyPayment" class="block text-4xl font-bold">--</span>
             </div>
-            <div
-                class="bg-c21-gold text-black p-4 rounded-lg mt-6 flex justify-between items-baseline text-lg shadow-lg">
-                <span class="font-bold pr-2" id="agentTakeHomeLabel">Ingreso para Asesor (50%)</span>
-                <span id="agentTakeHome" class="font-bold text-right flex-shrink-0 self-center">$0.00</span>
+            <div class="mt-4 space-y-3 text-gray-600 text-sm">
+                <div class="flex justify-between items-baseline py-2 border-b"><span class="pr-2">Monto de
+                        Enganche</span><span id="engancheAmount" class="font-semibold text-right">--</span></div>
+                <div class="flex justify-between items-baseline py-2 border-b"><span class="pr-2">Monto a Diferir en
+                        Mensualidades</span><span id="financedAmount" class="font-semibold text-right">--</span></div>
+                <div class="flex justify-between items-baseline py-2"><span class="pr-2">Monto de Saldo Contra
+                        Entrega</span><span id="saldoAmount" class="font-semibold text-right">--</span></div>
             </div>
         </div>
 
-        <div class="mt-8 text-xs text-c21-dark-gold bg-c21-gold/10 p-3 rounded-lg text-justify shadow-inner">
-            <strong>Nota Importante:</strong> Esta calculadora es una herramienta de estimación. Los cálculos no
-            incluyen IVA, ISR u otras
-            deducciones aplicables. Favor de validar con Gerencia o Dirección.
+        <div id="timelineContainer" class="mt-8">
+            <h2 class="text-center text-xl font-bold text-c21-grey mb-4 pb-2 border-b">Cronograma de Pagos</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Concepto</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Fecha Estimada</th>
+                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timelineBody" class="bg-white divide-y divide-gray-200">
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+
+        <div class="mt-8 text-xs text-c21-dark-gold bg-c21-gold/10 p-3 rounded-lg text-justify shadow-inner no-print">
+            <strong>Nota Importante:</strong> Esta es una simulación y no una oferta vinculante. Los montos y fechas son
+            estimaciones y están sujetos a los términos del contrato de compraventa final. No incluye gastos notariales,
+            impuestos u otros costos de cierre.
+        </div>
+
     </main>
 
     <script>
-        // --- CONFIGURACIÓN DE LA CALCULADORA ---
-        const ROYALTY_RATE = 0.08; // 8% de regalías
-        const AGENT_SPLIT_RATE = 0.50; // 50% para el asesor
+        let engancheMode = '%'; // '%' or '$'
+        let saldoMode = '%';
 
-        function formatCurrency(value, withSign = false) {
-            const sign = withSign && value > 0 ? '-' : '';
-            return sign + new Intl.NumberFormat('es-MX', {
-                style: 'currency',
-                currency: 'MXN'
-            }).format(Math.abs(value));
+        function formatCurrency(value) {
+            if (isNaN(value)) return '$0.00';
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value);
         }
 
-        function formatInputValue(inputElement) {
-            let value = inputElement.value.replace(/[^0-9]/g, '');
+        function getNumericValue(id) {
+            const el = document.getElementById(id);
+            if (!el) return 0;
+            return parseFloat(String(el.value).replace(/,/g, '')) || 0;
+        }
+
+        function formatInputValue(el) {
+            if (!el) return;
+            let value = el.value.replace(/[^0-9]/g, '');
             if (value) {
-                const numberValue = parseInt(value, 10);
-                inputElement.value = new Intl.NumberFormat('es-MX').format(numberValue);
+                el.value = new Intl.NumberFormat('es-MX').format(parseInt(value, 10));
             } else {
-                inputElement.value = '';
+                el.value = '';
             }
         }
 
-        function formatAndCalculate() {
-            const input = document.getElementById('propertyValue');
-            formatInputValue(input);
-            calculateCommission();
+        function setMode(type, mode) {
+            const inputElement = document.getElementById(type + 'Value');
+            const currentValue = getNumericValue(type + 'Value');
+
+            if (type === 'enganche') {
+                engancheMode = mode;
+                document.getElementById('enganchePercent').className = mode === '%' ? 'w-1/2 bg-c21-grey text-white font-bold' : 'w-1/2 bg-gray-200 text-gray-600 font-bold';
+                document.getElementById('engancheMonto').className = mode === '$' ? 'w-1/2 bg-c21-grey text-white font-bold' : 'w-1/2 bg-gray-200 text-gray-600 font-bold';
+            } else if (type === 'saldo') {
+                saldoMode = mode;
+                document.getElementById('saldoPercent').className = mode === '%' ? 'w-1/2 bg-c21-grey text-white font-bold' : 'w-1/2 bg-gray-200 text-gray-600 font-bold';
+                document.getElementById('saldoMonto').className = mode === '$' ? 'w-1/2 bg-c21-grey text-white font-bold' : 'w-1/2 bg-gray-200 text-gray-600 font-bold';
+            }
+
+            // Adjust input format based on new mode
+            if (mode === '$') {
+                formatInputValue(inputElement);
+            } else {
+                inputElement.value = currentValue; // Keep it as a plain number for percentage
+            }
+
+            calculateAll();
         }
 
-        function calculateCommission() {
-            const propertyValueString = document.getElementById('propertyValue').value.replace(/,/g, '') || '0';
-            const propertyValue = parseFloat(propertyValueString);
-            const commissionRate = parseFloat(document.getElementById('commissionRate').value) || 0;
-
-            // Un "lado" es la mitad de la comisión total.
-            const commissionPerSideRate = commissionRate / 2;
-
-            // 1. Ingreso Bruto por Comisión (GCI) por Lado
-            const gci = propertyValue * (commissionPerSideRate / 100);
-
-            // 2. Regalías Century 21 y FNP (8% del GCI)
-            const royalties = gci * ROYALTY_RATE;
-
-            // 3. Comisión después de Regalías (AGC)
-            const agc = gci - royalties;
-
-            // 4. INGRESO PARA ASESOR (50% del AGC)
-            const agentTakeHome = agc * AGENT_SPLIT_RATE;
-
-            // Actualizar etiquetas con porcentajes dinámicos
-            document.getElementById('royaltiesLabel').textContent = `Regalías C21 y FNP (${ROYALTY_RATE * 100}%)`;
-            document.getElementById('agentTakeHomeLabel').textContent = `Ingreso para Asesor (${AGENT_SPLIT_RATE * 100}%)`;
-
-            // Mostrar resultados en la página
-            document.getElementById('gciResult').textContent = formatCurrency(gci);
-            document.getElementById('royaltiesResult').textContent = formatCurrency(royalties, true); // Añadir signo negativo
-            document.getElementById('agcResult').textContent = formatCurrency(agc);
-            document.getElementById('agentTakeHome').textContent = formatCurrency(agentTakeHome);
+        function handleDynamicInput(type) {
+            const element = document.getElementById(type + 'Value');
+            const mode = (type === 'enganche') ? engancheMode : saldoMode;
+            if (mode === '$') {
+                formatInputValue(element);
+            }
+            calculateAll();
         }
 
-        // Cargar un valor de ejemplo al iniciar para que la calculadora no aparezca vacía
+        function calculateAll() {
+            const totalPrice = getNumericValue('totalPrice');
+            const validationMessage = document.getElementById('validationMessage');
+
+            if (totalPrice === 0) {
+                resetResults();
+                validationMessage.textContent = '';
+                validationMessage.className = 'mt-6 text-center font-semibold p-3 rounded-lg';
+                return;
+            }
+
+            const apartado = getNumericValue('apartado');
+            const numMensualidades = getNumericValue('numMensualidades');
+            const engancheValue = getNumericValue('engancheValue');
+            const saldoValue = getNumericValue('saldoValue');
+
+            const engancheAmount = (engancheMode === '%') ? totalPrice * (engancheValue / 100) : engancheValue;
+            const saldoAmount = (saldoMode === '%') ? totalPrice * (saldoValue / 100) : saldoValue;
+
+            const financedAmount = totalPrice - apartado - engancheAmount - saldoAmount;
+
+            if (financedAmount < -0.01) { // Use a small tolerance for floating point issues
+                validationMessage.textContent = '⚠️ ¡Alerta! La suma de pagos supera el Precio Total.';
+                validationMessage.className = 'mt-6 text-center font-semibold p-3 rounded-lg bg-red-100 text-red-700';
+                resetResults(engancheAmount, financedAmount, saldoAmount);
+                return;
+            }
+
+            const totalCalculated = apartado + engancheAmount + financedAmount + saldoAmount;
+            if (Math.abs(totalPrice - totalCalculated) > 0.01) {
+                validationMessage.textContent = '⚠️ ¡Alerta! El plan de pagos no cuadra. Revisa los montos.';
+                validationMessage.className = 'mt-6 text-center font-semibold p-3 rounded-lg bg-yellow-100 text-yellow-700';
+            } else {
+                validationMessage.textContent = '✅ El plan de pagos es financieramente viable.';
+                validationMessage.className = 'mt-6 text-center font-semibold p-3 rounded-lg bg-green-100 text-green-700';
+            }
+
+            const monthlyPayment = (numMensualidades > 0) ? financedAmount / numMensualidades : 0;
+
+            document.getElementById('monthlyPayment').textContent = formatCurrency(monthlyPayment);
+            document.getElementById('engancheAmount').textContent = formatCurrency(engancheAmount);
+            document.getElementById('financedAmount').textContent = formatCurrency(financedAmount);
+            document.getElementById('saldoAmount').textContent = formatCurrency(saldoAmount);
+
+            generateTimeline(apartado, engancheAmount, monthlyPayment, numMensualidades, saldoAmount);
+        }
+
+        function resetResults(enganche = 0, financiado = 0, saldo = 0) {
+            document.getElementById('monthlyPayment').textContent = formatCurrency(0);
+            document.getElementById('engancheAmount').textContent = formatCurrency(enganche);
+            document.getElementById('financedAmount').textContent = formatCurrency(financiado);
+            document.getElementById('saldoAmount').textContent = formatCurrency(saldo);
+            document.getElementById('timelineBody').innerHTML = '';
+        }
+
+        function generateTimeline(apartado, enganche, mensualidad, numMeses, saldo) {
+            const timelineBody = document.getElementById('timelineBody');
+            timelineBody.innerHTML = '';
+            const startDateInput = document.getElementById('startDate').value;
+            const startDate = startDateInput ? new Date(startDateInput + 'T12:00:00') : new Date();
+
+            const addRow = (concept, date, amount) => {
+                const row = `<tr>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">${concept}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">${date}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 text-right font-semibold">${formatCurrency(amount)}</td>
+                </tr>`;
+                timelineBody.innerHTML += row;
+            };
+
+            if (apartado > 0) addRow('Apartado (Reserva)', 'Al firmar oferta', apartado);
+            if (enganche > 0) addRow('Enganche', 'Firma de Contrato', enganche);
+
+            if (mensualidad > 0) {
+                for (let i = 1; i <= numMeses; i++) {
+                    const paymentDate = new Date(startDate);
+                    paymentDate.setMonth(startDate.getMonth() + i - 1);
+                    const dateString = paymentDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+                    addRow(`Mensualidad ${i}`, dateString, mensualidad);
+                }
+            }
+
+            if (saldo > 0) {
+                const finalDate = new Date(startDate);
+                finalDate.setMonth(startDate.getMonth() + numMeses);
+                const dateString = finalDate.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+                addRow('Saldo Contra Entrega', `Est. ${dateString}`, saldo);
+            }
+        }
+
+        function formatAndCalculateAll(elementId) {
+            const el = document.getElementById(elementId);
+            formatInputValue(el);
+            calculateAll();
+        }
+
+        function setInitialDate() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            document.getElementById('startDate').value = `${year}-${month}-${day}`;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const propertyInput = document.getElementById('propertyValue');
-            propertyInput.value = '2500000'; // Usar string para que la función lo formatee
-            formatInputValue(propertyInput);
-            calculateCommission();
+            document.getElementById('totalPrice').value = '5,000,000';
+            document.getElementById('apartado').value = '100,000';
+            setInitialDate();
+            formatAndCalculateAll('totalPrice');
+            formatAndCalculateAll('apartado');
         });
     </script>
 
